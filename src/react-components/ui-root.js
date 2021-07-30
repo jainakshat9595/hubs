@@ -41,6 +41,7 @@ import { LoadingScreenContainer } from "./room/LoadingScreenContainer";
 
 import { RoomLayoutContainer } from "./room/RoomLayoutContainer";
 import roomLayoutStyles from "./layout/RoomLayout.scss";
+import { Separator } from "./layout/Separator";
 import { useAccessibleOutlineStyle } from "./input/useAccessibleOutlineStyle";
 import { ToolbarButton } from "./input/ToolbarButton";
 import { RoomEntryModal } from "./room/RoomEntryModal";
@@ -50,7 +51,6 @@ import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
 import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
-import { ContentMenu, PeopleMenuButton, ObjectsMenuButton } from "./room/ContentMenu";
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
@@ -69,6 +69,8 @@ import { ReactComponent as VRIcon } from "./icons/VR.svg";
 import { ReactComponent as LeaveIcon } from "./icons/Leave.svg";
 import { ReactComponent as EnterIcon } from "./icons/Enter.svg";
 import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
+import { ReactComponent as ObjectsIcon } from "./icons/Objects.svg";
+import { ReactComponent as PeopleIcon } from "./icons/People.svg";
 import { PeopleSidebarContainer, userFromPresence } from "./room/PeopleSidebarContainer";
 import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
@@ -1338,21 +1340,6 @@ class UIRoot extends Component {
                   <>
                     {!this.state.dialog && renderEntryFlow ? entryDialog : undefined}
                     {!this.props.selectedObject && <CompactMoreMenuButton />}
-                    {(!this.props.selectedObject ||
-                      (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (
-                      <ContentMenu>
-                        {showObjectList && (
-                          <ObjectsMenuButton
-                            active={this.state.sidebarId === "objects"}
-                            onClick={() => this.toggleSidebar("objects")}
-                          />
-                        )}
-                        <PeopleMenuButton
-                          active={this.state.sidebarId === "people"}
-                          onClick={() => this.toggleSidebar("people")}
-                        />
-                      </ContentMenu>
-                    )}
                     {!entered && !streaming && !isMobile && streamerName && <SpectatingLabel name={streamerName} />}
                     {this.props.activeObject && (
                       <ObjectMenuContainer
@@ -1494,13 +1481,21 @@ class UIRoot extends Component {
                 }
                 modal={this.state.dialog}
                 toolbarLeft={
-                  <InvitePopoverContainer
-                    hub={this.props.hub}
-                    hubChannel={this.props.hubChannel}
-                    scene={this.props.scene}
-                  />
+                  entered && (
+                    <ToolbarButton
+                      icon={<LeaveIcon />}
+                      label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Exit Room" />}
+                      preset="cancel"
+                      onClick={() => {
+                        this.showNonHistoriedDialog(LeaveRoomModal, {
+                          destinationUrl: "/",
+                          reason: LeaveReason.leaveRoom
+                        });
+                      }}
+                    />
+                  )
                 }
-                toolbarCenter={
+                toolbarRight={
                   <>
                     {watching && (
                       <>
@@ -1538,7 +1533,36 @@ class UIRoot extends Component {
                         {this.props.hubChannel.can("spawn_emoji") && <ReactionPopoverContainer />}
                       </>
                     )}
+                    <Separator />
+                    <InvitePopoverContainer
+                      hub={this.props.hub}
+                      hubChannel={this.props.hubChannel}
+                      scene={this.props.scene}
+                    />
                     <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
+                    {(!this.props.selectedObject ||
+                      (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (
+                      <>
+                        {showObjectList && (
+                          <ToolbarButton
+                            icon={<ObjectsIcon />}
+                            label={<FormattedMessage id="toolbar.objects-sidebar-button" defaultMessage="Media" />}
+                            preset="accept"
+                            onClick={() => this.toggleSidebar("objects")}
+                            // active={this.state.sidebarId === "objects"}
+                          />
+                        )}
+                        <ToolbarButton
+                          icon={<PeopleIcon />}
+                          label={
+                            <FormattedMessage id="toolbar.participants-sidebar-button" defaultMessage="Participants" />
+                          }
+                          preset="accept"
+                          onClick={() => this.toggleSidebar("people")}
+                          // active={this.state.sidebarId === "people"}
+                        />
+                      </>
+                    )}
                     {entered &&
                       isMobileVR && (
                         <ToolbarButton
@@ -1549,10 +1573,6 @@ class UIRoot extends Component {
                           onClick={() => exit2DInterstitialAndEnterVR(true)}
                         />
                       )}
-                  </>
-                }
-                toolbarRight={
-                  <>
                     {entered &&
                       isMobileVR && (
                         <ToolbarButton
@@ -1562,19 +1582,7 @@ class UIRoot extends Component {
                           onClick={() => exit2DInterstitialAndEnterVR(true)}
                         />
                       )}
-                    {entered && (
-                      <ToolbarButton
-                        icon={<LeaveIcon />}
-                        label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
-                        preset="cancel"
-                        onClick={() => {
-                          this.showNonHistoriedDialog(LeaveRoomModal, {
-                            destinationUrl: "/",
-                            reason: LeaveReason.leaveRoom
-                          });
-                        }}
-                      />
-                    )}
+                    <Separator />
                     <MoreMenuPopoverButton menu={moreMenu} />
                   </>
                 }
