@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "../modal/Modal";
 import { CloseButton } from "../input/CloseButton";
@@ -10,26 +10,37 @@ import { Column } from "../layout/Column";
 
 export function AvatarUrlModal({ onSubmit, onClose }) {
   const { handleSubmit, register } = useForm();
+
+  const iframeUrl = "https://demo.readyplayer.me";
+
+  const receiveMessage = (event) => {
+    setTimeout(() => {
+      if (iframeUrl.includes(event.origin)) {
+        console.log(`Avatar URL: ${event.data}`);
+        onSubmit({
+          url: event.data
+        });
+      }
+    }, 1000);
+  }
+
+  useEffect(() => {
+    window.addEventListener("message", receiveMessage, false);
+    return () => {
+      window.removeEventListener("message", receiveMessage, false);
+    }
+  }, []);
+
   return (
-    <Modal title="Custom Avatar URL" beforeTitle={<CloseButton onClick={onClose} />}>
-      <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}>
-        <TextInputField
-          name="url"
-          label={<FormattedMessage id="avatar-url-modal.avatar-url-label" defaultMessage="Avatar GLB URL" />}
-          placeholder="https://example.com/avatar.glb"
-          type="url"
-          required
-          ref={register}
-          description={
-            <a href="https://hubs.mozilla.com/docs/intro-avatars.html" target="_blank" rel="noopener noreferrer">
-              <FormattedMessage
-                id="avatar-url-modal.custom-avatar-docs-link"
-                defaultMessage="Learn more about custom avatars"
-              />
-            </a>
-          }
+    <Modal title="Create Custom Avatar" beforeTitle={<CloseButton onClick={onClose} />} className={'force-fullwidth'}>
+      <Column as="div" padding center onSubmit={handleSubmit(onSubmit)}>
+        <iframe
+          src={iframeUrl}
+          style={{
+            width: '100%',
+            height: '65vh'
+          }}
         />
-        <ApplyButton type="submit" />
       </Column>
     </Modal>
   );

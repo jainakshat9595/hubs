@@ -119,7 +119,7 @@ const customObjectMessages = defineMessages({
   },
   avatar: {
     id: "media-browser.add_custom_avatar",
-    defaultMessage: "Avatar GLB URL"
+    defaultMessage: "Create Custom Avatar"
   }
 });
 

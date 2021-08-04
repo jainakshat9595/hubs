@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import styles from "./Modal.scss";
+import "./../styles/custom.css";
 
 export function Modal({ title, beforeTitle, afterTitle, children, contentClassName, className, disableFullscreen }) {
   return (
