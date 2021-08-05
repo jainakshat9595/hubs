@@ -7,6 +7,7 @@ import { faUndo } from "@fortawesome/free-solid-svg-icons/faUndo";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
 import { FormattedMessage, injectIntl, useIntl, defineMessages } from "react-intl";
 import styles from "../assets/stylesheets/preferences-screen.scss";
+import ReportsLayout from './layout/ReportsLayout';
 import { defaultMaterialQualitySetting } from "../storage/store";
 import { AVAILABLE_LOCALES } from "../assets/locales/locale_config";
 import { themes } from "./styles/theme";
@@ -589,13 +590,15 @@ const CATEGORY_CONTROLS = 1;
 const CATEGORY_MISC = 2;
 const CATEGORY_MOVEMENT = 3;
 const CATEGORY_TOUCHSCREEN = 4;
-const TOP_LEVEL_CATEGORIES = [CATEGORY_AUDIO, CATEGORY_CONTROLS, CATEGORY_MISC];
+const CATEGORY_REPORTS = 5;
+const TOP_LEVEL_CATEGORIES = [CATEGORY_AUDIO, CATEGORY_CONTROLS, CATEGORY_MISC, CATEGORY_REPORTS];
 const categoryNames = defineMessages({
   [CATEGORY_AUDIO]: { id: "preferences-screen.category.audio", defaultMessage: "Audio" },
   [CATEGORY_CONTROLS]: { id: "preferences-screen.category.controls", defaultMessage: "Controls" },
   [CATEGORY_MISC]: { id: "preferences-screen.category.misc", defaultMessage: "Misc" },
   [CATEGORY_MOVEMENT]: { id: "preferences-screen.category.movement", defaultMessage: "Movement" },
-  [CATEGORY_TOUCHSCREEN]: { id: "preferences-screen.category.touchscreen", defaultMessage: "Touchscreen" }
+  [CATEGORY_TOUCHSCREEN]: { id: "preferences-screen.category.touchscreen", defaultMessage: "Touchscreen" },
+  [CATEGORY_REPORTS]: { id: "preferences-screen.category.reports", defaultMessage: "Reports" }
 });
 
 function NavItem({ ariaLabel, title, onClick, selected }) {
@@ -740,6 +743,18 @@ class RefreshPrompt extends React.Component {
     );
   }
 }
+
+const ReportsLayoutContainer = props => {
+  return (
+    <div className={`reports-layout-container`}>
+      <ReportsLayout />
+    </div>
+  );
+}
+Section.ReportsLayoutContainer = {
+  // name: PropTypes.string,
+  // items: PropTypes.node.isRequired
+};
 
 class PreferencesScreen extends Component {
   static propTypes = {
@@ -1073,6 +1088,14 @@ class PreferencesScreen extends Component {
     ]);
   }
 
+  createCustomSections() {
+    const categoryDefMap = this.createSections().get(this.state.category);
+    if(this.state.category === CATEGORY_REPORTS) {
+      return <ReportsLayoutContainer />
+    }
+    return categoryDefMap.map(Section);
+  }
+
   render() {
     const intl = this.props.intl;
     const shouldPromptForRefresh = !!this.props.store.state.preferences.shouldPromptForRefresh;
@@ -1107,9 +1130,7 @@ class PreferencesScreen extends Component {
         </Nav>
         <div className={styles.contentContainer}>
           <div className={styles.scrollingContent}>
-            {this.createSections()
-              .get(this.state.category)
-              .map(Section)}
+            {this.createCustomSections()}
             {shouldPromptForRefresh && (
               <div
                 style={{

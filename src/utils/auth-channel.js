@@ -76,6 +76,10 @@ export default class AuthChannel {
   async handleAuthCredentials(email, token, hubChannel) {
     this.store.update({ credentials: { email, token } });
 
+    // Push sign in success event to Matomo
+    // const _paqM = _paq || window._paq || [];
+    window._paq.push(['trackEvent', 'Auth', 'Login', email]);
+
     if (hubChannel) {
       await hubChannel.signIn(token);
     }
