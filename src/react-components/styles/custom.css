@@ -1,3 +1,19 @@
 .force-fullwidth {
     max-width: none !important;
 }
+
+.reports-layout-container table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+.reports-layout-container td, .reports-layout-container th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .reports-layout-container tr:nth-child(even) {
+    background-color: #dddddd;
+  }

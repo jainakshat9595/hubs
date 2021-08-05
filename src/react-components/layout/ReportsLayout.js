@@ -28,7 +28,6 @@ const ReportsLayout = props => {
 
   return (
     <div>
-      <p>This is ReportsLayout</p>
       {load && <p>Loading..</p>}
       {!load && <table>
           <tr>

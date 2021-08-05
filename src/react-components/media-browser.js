@@ -393,6 +393,8 @@ class MediaBrowserContainer extends Component {
       }
     };
 
+    this.showCustomMediaDialog('avatars');
+
     const activeFilter =
       searchParams.get("filter") || (searchParams.get("similar_to") && "similar") || (!searchParams.get("q") && "");
 
