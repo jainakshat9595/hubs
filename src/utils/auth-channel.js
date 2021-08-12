@@ -78,7 +78,9 @@ export default class AuthChannel {
 
     // Push sign in success event to Matomo
     // const _paqM = _paq || window._paq || [];
-    window._paq.push(['trackEvent', 'Auth', 'Login', email]);
+    if(window._paq) {
+      window._paq.push(['trackEvent', 'Auth', 'Login', email]);
+    }
 
     if (hubChannel) {
       await hubChannel.signIn(token);
