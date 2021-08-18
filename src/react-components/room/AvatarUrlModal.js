@@ -11,7 +11,7 @@ import { Column } from "../layout/Column";
 export function AvatarUrlModal({ onSubmit, onClose }) {
   const { handleSubmit, register } = useForm();
 
-  const iframeUrl = "https://demo.readyplayer.me";
+  const iframeUrl = "https://360vr.readyplayer.me";
 
   const receiveMessage = (event) => {
     setTimeout(() => {
