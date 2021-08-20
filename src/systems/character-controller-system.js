@@ -111,7 +111,7 @@ export class CharacterControllerSystem {
     return function travelByWaypoint(inMat4, snapToNavMesh, willMaintainInitialOrientation) {
       this.avatarPOV.object3D.updateMatrices();
       if (!this.fly && !snapToNavMesh) {
-        this.fly = true;
+        this.fly = false;
         this.shouldLandWhenPossible = true;
         this.shouldUnoccupyWaypointsOnceMoving = true;
       }
@@ -232,10 +232,10 @@ export class CharacterControllerSystem {
 
       const userinput = AFRAME.scenes[0].systems.userinput;
       const wasFlying = this.fly;
-      if (userinput.get(paths.actions.toggleFly)) {
-        this.shouldLandWhenPossible = false;
-        this.avatarRig.messageDispatch.dispatch("/fly"); // TODO: Separate the logic about displaying the message from toggling the fly state in such a way that it is clear that this.fly will be toggled here
-      }
+      // if (userinput.get(paths.actions.toggleFly)) {
+      //   this.shouldLandWhenPossible = false;
+      //   this.avatarRig.messageDispatch.dispatch("/fly"); // TODO: Separate the logic about displaying the message from toggling the fly state in such a way that it is clear that this.fly will be toggled here
+      // }
       const didStopFlying = wasFlying && !this.fly;
       if (!this.fly && this.shouldLandWhenPossible) {
         this.shouldLandWhenPossible = false;
@@ -417,7 +417,7 @@ export class CharacterControllerSystem {
 
   enableFly(enabled) {
     if (enabled && window.APP.hubChannel && window.APP.hubChannel.can("fly")) {
-      this.fly = true;
+      this.fly = false;
     } else {
       this.fly = false;
     }

@@ -1534,11 +1534,11 @@ class UIRoot extends Component {
                       </>
                     )}
                     <Separator />
-                    <InvitePopoverContainer
+                    {/* <InvitePopoverContainer
                       hub={this.props.hub}
                       hubChannel={this.props.hubChannel}
                       scene={this.props.scene}
-                    />
+                    /> */}
                     <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
                     {(!this.props.selectedObject ||
                       (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (
@@ -1552,7 +1552,7 @@ class UIRoot extends Component {
                             // active={this.state.sidebarId === "objects"}
                           />
                         )}
-                        <ToolbarButton
+                        {/* <ToolbarButton
                           icon={<PeopleIcon />}
                           label={
                             <FormattedMessage id="toolbar.participants-sidebar-button" defaultMessage="Participants" />
@@ -1560,7 +1560,7 @@ class UIRoot extends Component {
                           preset="accept"
                           onClick={() => this.toggleSidebar("people")}
                           // active={this.state.sidebarId === "people"}
-                        />
+                        /> */}
                       </>
                     )}
                     {entered &&
