@@ -650,7 +650,7 @@ class UIRoot extends Component {
 
   toggleStreamerMode = () => {
     const isStreaming = !this.state.isStreaming;
-    this.props.scene.systems["hubs-systems"].characterController.fly = isStreaming;
+    this.props.scene.systems["hubs-systems"].characterController.fly = isStreaming && false;
 
     if (isStreaming) {
       this.props.hubChannel.beginStreaming();
